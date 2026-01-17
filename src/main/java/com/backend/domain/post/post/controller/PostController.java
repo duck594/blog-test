@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate; // RestTemplate 임포트
+import org.springframework.web.reactive.function.client.WebClient; // WebClient 임포트
 import com.backend.domain.post.post.service.PostService;
 import com.backend.domain.post.post.dto.Todo; // Todo DTO 임포트
 
@@ -20,7 +20,7 @@ import com.backend.domain.post.post.entity.Post;
 @RequiredArgsConstructor
 public class PostController {
   private final PostService postService;
-  private final RestTemplate restTemplate; // RestTemplate 주입
+  private final WebClient webClient; // WebClient 주입
 
   @GetMapping("/list")
   public String getPosts(Model model) {
@@ -41,8 +41,13 @@ public class PostController {
   @GetMapping("/list/todos")
   public String getTodos(Model model) {
     String apiUrl = "https://jsonplaceholder.typicode.com/todos";
-    // RestTemplate을 사용하여 외부 API 호출
-    Todo[] todosArray = restTemplate.getForObject(apiUrl, Todo[].class);
+    // WebClient를 사용하여 외부 API 호출
+    Todo[] todosArray = webClient.get()
+                                 .uri(apiUrl)
+                                 .retrieve()
+                                 .bodyToMono(Todo[].class) // Mono<Todo[]> 반환
+                                 .block(); // 동기적으로 결과를 기다림 (Thymeleaf 사용 시)
+
     List<Todo> todos = Arrays.asList(todosArray);
 
     model.addAttribute("todos", todos); // 모델에 todos 추가

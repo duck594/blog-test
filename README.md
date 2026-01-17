@@ -36,7 +36,7 @@ cd spring-boot-stater
 
 ## 외부 API 호출 및 사용법
 
-이 프로젝트는 `RestTemplate`를 사용하여 외부 JSON API를 호출하고, 그 데이터를 Thymeleaf 템플릿을 통해 웹 페이지에 표시하는 예제를 포함하고 있습니다.
+이 프로젝트는 `WebClient`를 사용하여 외부 JSON API를 호출하고, 그 데이터를 Thymeleaf 템플릿을 통해 웹 페이지에 표시하는 예제를 포함하고 있습니다. `WebClient`는 Spring WebFlux의 일부로, 비동기적이고 논블로킹 방식으로 HTTP 요청을 처리할 수 있는 강력한 클라이언트입니다.
 
 ### 1. Todo DTO (Data Transfer Object)
 
@@ -62,36 +62,49 @@ cd spring-boot-stater
     }
     ```
 
-### 2. RestTemplate Bean 설정
+### 2. WebClient 의존성 추가
 
-`RestTemplate`는 Spring에서 제공하는 HTTP 클라이언트로, 외부 API를 호출하는 데 사용됩니다. 이 객체는 Spring 컨테이너에 빈으로 등록되어야 합니다.
+`WebClient`를 사용하려면 `build.gradle.kts` 파일에 `spring-boot-starter-webflux` 의존성을 추가해야 합니다.
+
+*   **경로**: `build.gradle.kts`
+*   **추가된 코드**:
+    ```kotlin
+    dependencies {
+        // ... 기존 의존성 ...
+        implementation("org.springframework.boot:spring-boot-starter-webflux") // WebClient 사용을 위한 의존성 추가
+    }
+    ```
+
+### 3. WebClient Bean 설정
+
+`WebClient`는 Spring에서 제공하는 HTTP 클라이언트로, 외부 API를 호출하는 데 사용됩니다. 이 객체는 Spring 컨테이너에 빈으로 등록되어야 합니다.
 
 *   **경로**: `src/main/java/com/backend/global/app/AppConfig.java`
 *   **추가된 코드**:
     ```java
     import org.springframework.context.annotation.Bean;
-    import org.springframework.web.client.RestTemplate;
+    import org.springframework.web.reactive.function.client.WebClient;
 
     @Configuration
     public class AppConfig {
         // ... 기존 코드 ...
 
         @Bean
-        public RestTemplate restTemplate() {
-            return new RestTemplate();
+        public WebClient webClient() {
+            return WebClient.builder().build();
         }
     }
     ```
 
-### 3. PostController에서 API 호출
+### 4. PostController에서 API 호출 (WebClient 사용)
 
-`PostController`는 `RestTemplate`를 주입받아 `jsonplaceholder.typicode.com/todos` API를 호출하고, 가져온 데이터를 Thymeleaf 템플릿으로 전달합니다.
+`PostController`는 `WebClient`를 주입받아 `jsonplaceholder.typicode.com/todos` API를 호출하고, 가져온 데이터를 Thymeleaf 템플릿으로 전달합니다.
 
 *   **경로**: `src/main/java/com/backend/domain/post/post/controller/PostController.java`
 *   **관련 메서드**:
     ```java
     import com.backend.domain.post.post.dto.Todo;
-    import org.springframework.web.client.RestTemplate;
+    import org.springframework.web.reactive.function.client.WebClient;
     import java.util.Arrays;
     import java.util.List;
 
@@ -100,13 +113,17 @@ cd spring-boot-stater
     @RequiredArgsConstructor
     public class PostController {
       private final PostService postService;
-      private final RestTemplate restTemplate; // RestTemplate 주입
+      private final WebClient webClient; // WebClient 주입
 
       @GetMapping("/list/todos")
       public String getTodos(Model model) {
         String apiUrl = "https://jsonplaceholder.typicode.com/todos";
-        // RestTemplate을 사용하여 외부 API 호출
-        Todo[] todosArray = restTemplate.getForObject(apiUrl, Todo[].class);
+        // WebClient를 사용하여 외부 API 호출
+        Todo[] todosArray = webClient.get()
+                                 .uri(apiUrl)
+                                 .retrieve()
+                                 .bodyToMono(Todo[].class) // Mono<Todo[]> 반환
+                                 .block(); // 동기적으로 결과를 기다림 (Thymeleaf 사용 시)
         List<Todo> todos = Arrays.asList(todosArray);
 
         model.addAttribute("todos", todos); // 모델에 todos 추가
@@ -116,7 +133,7 @@ cd spring-boot-stater
     }
     ```
 
-### 4. Thymeleaf 템플릿에서 데이터 표시
+### 5. Thymeleaf 템플릿에서 데이터 표시
 
 `posts/todos.html` 템플릿은 `PostController`에서 전달받은 `todos` 데이터를 사용하여 반응형 그리드 형태로 목록을 표시합니다.
 
