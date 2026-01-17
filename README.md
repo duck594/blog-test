@@ -1,4 +1,4 @@
-# Spring Boot Next.js Starter - 백엔드
+# Spring Boot Starter - 백엔드
 
 이 프로젝트는 Spring Boot를 사용한 백엔드 시작 템플릿입니다. 빠른 개발 시작을 위해 기본적인 설정과 구조를 제공합니다.
 
