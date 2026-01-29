@@ -2,6 +2,7 @@ package com.backend.domain.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,6 +14,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ToString(callSuper = true)
 public class Member {
+
+    @Id
     @Column
     private String username;
     private String password;
