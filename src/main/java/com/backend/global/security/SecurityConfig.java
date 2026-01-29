@@ -43,6 +43,37 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
+
+    return http.build();
+  }
+
+  @Bean
+  public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/", "/index", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+                .requestMatchers("/", "/blog/join").permitAll()
+                .requestMatchers("/css/**", "/js/**").permitAll()
+
+                .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/*/posts").permitAll()
+                .requestMatchers("/api/*/**").authenticated()
+                .anyRequest().authenticated()
+        )
+            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+            .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(form -> form
+                    .loginPage("/blog/login")
+                    .loginProcessingUrl("/blog/login")
+                    .defaultSuccessUrl("/")
+                    .permitAll()
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/member/logout")
+                    .logoutSuccessUrl("/")
+            )
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
     return http.build();
   }
 
