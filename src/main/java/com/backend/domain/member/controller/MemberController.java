@@ -5,19 +5,19 @@ import com.backend.domain.member.entity.Member;
 import com.backend.domain.member.join.MemberJoin;
 import com.backend.domain.member.service.MemberService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 
 import java.security.Principal;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
@@ -25,7 +25,7 @@ public class MemberController {
 
     @GetMapping("/join")
     public String bjoin() {
-        return "blog/join";
+        return "member/join";
     }
 
     @PostMapping("/join")
@@ -48,12 +48,12 @@ public class MemberController {
             throw new RuntimeException(e);
         }
 
-        return "redirect:/blog/profile";
+        return "redirect:/member/profile";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "blog/login";
+        return "member/login";
     }
 
     @GetMapping("/profile")
@@ -63,7 +63,7 @@ public class MemberController {
 
         model.addAttribute("member", member);
 
-        return "blog/profile";
+        return "member/profile";
     }
 
 }

@@ -24,7 +24,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
-    @Value("${custom.genFileDirPath}")
+    @Value("${custom.genFile.dirPath}")
     private String genFileDirPath;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;

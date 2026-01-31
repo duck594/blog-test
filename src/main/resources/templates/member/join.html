@@ -13,11 +13,11 @@
 
     <!-- ID -->
     <fieldset class="fieldset">
-        <legend class="fieldset-legend">ID</legend>
+        <legend class="fieldset-legend">아이디</legend>
         <label class="input validator">
             <input
                     type="text"
-                    placeholder="Enter your ID"
+                    placeholder="아이디를 입력해주세요"
                     required
                     pattern="[A-Za-z][A-Za-z0-9\-]*"
                     minlength="3"
@@ -29,12 +29,12 @@
 
     <!-- Password -->
     <fieldset class="fieldset">
-        <legend class="fieldset-legend">Password</legend>
+        <legend class="fieldset-legend">비밀번호</legend>
         <label class="input validator">
             <input
                     type="password"
                     required
-                    placeholder="Enter your Password"
+                    placeholder="비밀번호를 입력해주세요"
                     minlength="8"
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                     name="password"
@@ -44,12 +44,12 @@
 
     <!-- Confirm Password -->
     <fieldset class="fieldset">
-        <legend class="fieldset-legend">Confirm Password</legend>
+        <legend class="fieldset-legend">비밀번호 확인</legend>
         <label class="input validator">
             <input
                     type="password"
                     required
-                    placeholder="Confirm your Password"
+                    placeholder="비밀번호를 다시 입력해주세요"
                     minlength="8"
                     name="passwordConfirm"
             />
@@ -58,11 +58,11 @@
 
     <!-- Email -->
     <fieldset class="fieldset">
-        <legend class="fieldset-legend">Email</legend>
+        <legend class="fieldset-legend">이메일</legend>
         <label class="input validator">
             <input
                     type="email"
-                    placeholder="Enter your Email"
+                    placeholder="이메일을 입력해주세요"
                     required
                     name="email"
             />
@@ -70,7 +70,7 @@
     </fieldset>
 
     <!-- Submit -->
-    <button type="submit" class="btn btn-neutral w-full">Join</button>
+    <button type="submit" class="btn btn-neutral w-full">가입</button>
 
     <!-- Divider -->
     <div class="divider">OR</div>
@@ -79,11 +79,11 @@
     <div class="space-y-2">
         <a href="/oauth2/authorization/google" class="btn btn-outline w-full">
             <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 mr-2" alt="Google"/>
-            Sign up with Google
+            Google
         </a>
         <a href="/oauth2/authorization/kakao" class="btn w-full bg-yellow-400 text-black hover:bg-yellow-500">
             <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" class="w-5 h-5 mr-2" alt="Kakao"/>
-            Sign up with Kakao
+            Kakao
         </a>
     </div>
 </form>

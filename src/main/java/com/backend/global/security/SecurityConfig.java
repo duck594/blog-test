@@ -52,7 +52,7 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/", "/index", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
-                .requestMatchers("/", "/blog/join").permitAll()
+                .requestMatchers("/", "/member/join").permitAll()
                 .requestMatchers("/css/**", "/js/**").permitAll()
 
                 .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}").permitAll()
@@ -63,8 +63,8 @@ public class SecurityConfig {
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
             .csrf(AbstractHttpConfigurer::disable)
             .formLogin(form -> form
-                    .loginPage("/blog/login")
-                    .loginProcessingUrl("/blog/login")
+                    .loginPage("/member/login")
+                    .loginProcessingUrl("/member/login")
                     .defaultSuccessUrl("/")
                     .permitAll()
             )
