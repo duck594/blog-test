@@ -31,7 +31,9 @@ public class SecurityConfig {
             .requestMatchers("/", "/index", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
                 "/member/join", "/member/login")
             .permitAll()
-            // API 관련 규칙 (필요시 유지)
+            // 게시물 리스트 및 상세 페이지 허용 (UI)
+            .requestMatchers(HttpMethod.GET, "/posts/list", "/posts/{id:\\d+}").permitAll()
+            // API 관련 규칙 (기존 유지)
             .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/*/posts").permitAll()
             // 그 외 모든 요청은 인증 필요
