@@ -3,6 +3,7 @@ package com.backend.global.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -45,8 +46,9 @@ public class SecurityConfig {
             .loginPage("/member/login")
             .loginProcessingUrl("/member/login")
             .defaultSuccessUrl("/")
-            .permitAll())
-        .logout(logout -> logout
+            .permitAll()
+        ).oauth2Login(Customizer.withDefaults()
+        ).logout(logout -> logout
             .logoutUrl("/member/logout")
             .logoutSuccessUrl("/")
             .permitAll())
