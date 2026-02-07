@@ -1,5 +1,7 @@
 package com.backend.global.security;
 
+import com.backend.global.security.service.OAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +25,8 @@ import com.backend.global.app.AppConfig;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+  @Autowired
+  private OAuth2UserService oAuth2UserService;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -52,7 +56,7 @@ public class SecurityConfig {
             .logoutSuccessUrl("/")
             .permitAll())
         .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 타임리프(UI) 방식은 세션 활용
+             .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 타임리프(UI) 방식은 세션 활용
         )
         .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
